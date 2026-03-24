@@ -25,9 +25,8 @@ namespace ECommerce.Product.API.Controllers
             return Ok(result); // Oluşturulan ürünün Id'sini döner
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] GetProductsQuery query)
         {
-            var query = new GetProductsQuery();
             var result = await _mediator.Send(query);
             return Ok(result);
         }
