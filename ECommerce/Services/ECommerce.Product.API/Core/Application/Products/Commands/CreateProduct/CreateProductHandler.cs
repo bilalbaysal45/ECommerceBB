@@ -25,6 +25,7 @@ namespace ECommerce.Product.API.Core.Application.Products.Commands.CreateProduct
                 Price = request.Price,
                 StockCount = request.StockCount,
                 IsActive = true,
+                CategoryId = request.CategoryId,
                 CreatedDate = DateTime.UtcNow
             };
 

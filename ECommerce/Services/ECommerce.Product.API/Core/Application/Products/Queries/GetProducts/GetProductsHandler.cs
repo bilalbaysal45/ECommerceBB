@@ -21,7 +21,7 @@ namespace ECommerce.Product.API.Core.Application.Products.Queries.GetProducts
         public async Task<List<ProductDto>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
         {
             // Veritabanındaki tüm ürünleri liste olarak çekiyoruz
-            var products = await _context.Products.AsNoTracking().ToListAsync(cancellationToken);
+            var products = await _context.Products.Include(p => p.Category).AsNoTracking().ToListAsync(cancellationToken);
             return _mapper.Map<List<ProductDto>>(products);
         }
     }
