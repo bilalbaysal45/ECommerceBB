@@ -1,4 +1,5 @@
 using ECommerce.Product.API.Core.Application.Mapping;
+using ECommerce.Product.API.Core.Application.Pipelines;
 using ECommerce.Product.API.Infrastructure.Persistence;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -7,14 +8,14 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// ...
-builder.Services.AddFluentValidationAutoValidation(); // Otomatik validation için
-builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Validator'larý bulmasý için
 
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 // MediatR'ý sisteme kaydediyoruz. 
 // 'typeof(Program).Assembly' ifadesi, uygulamadaki tüm Handler sýnýflarýný otomatik taramasýný saðlar.
 builder.Services.AddMediatR(cfg => {
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    // Pipeline Behavior kaydý
+    cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
