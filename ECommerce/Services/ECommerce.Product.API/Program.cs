@@ -1,5 +1,6 @@
 using ECommerce.Product.API.Core.Application.Mapping;
 using ECommerce.Product.API.Core.Application.Pipelines;
+using ECommerce.Product.API.Infrastructure.Middlewares;
 using ECommerce.Product.API.Infrastructure.Persistence;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -28,6 +29,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// Hatalarý en üstte yakalamasý için en baþa ekliyoruz
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
