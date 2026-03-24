@@ -1,3 +1,4 @@
+using ECommerce.Product.API.Core.Application.Mapping;
 using ECommerce.Product.API.Infrastructure.Persistence;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -15,6 +16,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>(); // Validator'la
 builder.Services.AddMediatR(cfg => {
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
 });
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ProductDbContext>(options =>
     options.UseSqlServer(connectionString));
