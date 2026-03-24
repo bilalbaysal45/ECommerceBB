@@ -1,5 +1,6 @@
 ﻿using ECommerce.Product.API.Core.Application.Products.Commands.CreateProduct;
 using ECommerce.Product.API.Core.Application.Products.Commands.DeleteProduct;
+using ECommerce.Product.API.Core.Application.Products.Commands.UpdateProduct;
 using ECommerce.Product.API.Core.Application.Products.Queries.GetProductById;
 using ECommerce.Product.API.Core.Application.Products.Queries.GetProducts;
 using MediatR;
@@ -49,6 +50,20 @@ namespace ECommerce.Product.API.Controllers
                 return NotFound("Silinecek ürün bulunamadı.");
 
             return NoContent(); // 204 No Content: İşlem başarılı ama dönecek veri yok
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductCommand command)
+        {
+            // Güvenlik: URL'deki Id ile Body içindeki Id uyuşmalı
+            if (id != command.Id)
+                return BadRequest("Id uyuşmazlığı.");
+
+            var result = await _mediator.Send(command);
+
+            if (!result)
+                return NotFound("Güncellenecek ürün bulunamadı.");
+
+            return Ok("Ürün başarıyla güncellendi.");
         }
     }
 }
