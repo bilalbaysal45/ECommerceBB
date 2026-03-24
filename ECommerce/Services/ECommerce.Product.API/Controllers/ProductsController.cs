@@ -1,4 +1,5 @@
 ﻿using ECommerce.Product.API.Core.Application.Products.Commands.CreateProduct;
+using ECommerce.Product.API.Core.Application.Products.Commands.DeleteProduct;
 using ECommerce.Product.API.Core.Application.Products.Queries.GetProductById;
 using ECommerce.Product.API.Core.Application.Products.Queries.GetProducts;
 using MediatR;
@@ -38,6 +39,16 @@ namespace ECommerce.Product.API.Controllers
                 return NotFound("Ürün bulunamadı.");
 
             return Ok(result);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var result = await _mediator.Send(new DeleteProductCommand(id));
+
+            if (!result)
+                return NotFound("Silinecek ürün bulunamadı.");
+
+            return NoContent(); // 204 No Content: İşlem başarılı ama dönecek veri yok
         }
     }
 }
