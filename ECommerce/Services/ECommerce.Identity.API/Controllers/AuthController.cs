@@ -46,24 +46,32 @@ namespace ECommerce.Identity.API.Controllers
 
             if (user != null && await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
-                var token = GenerateJwtToken(user);
+                var token = await GenerateJwtToken(user);
                 return Ok(new AuthResponseDto { IsSuccess = true, Token = token });
             }
 
             return Unauthorized(new AuthResponseDto { IsSuccess = false, Message = "Kullanıcı adı veya şifre hatalı!" });
         }
-        private string GenerateJwtToken(ApplicationUser user)
+        private async Task<string> GenerateJwtToken(ApplicationUser user)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var key = Encoding.ASCII.GetBytes(jwtSettings["Secret"]);
+
+            var roles = await _userManager.GetRolesAsync(user);
 
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.UserName),
                 new Claim("FullName", user.FullName)
             };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

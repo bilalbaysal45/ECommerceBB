@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Product.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
@@ -20,12 +19,14 @@ namespace ECommerce.Product.API.Controllers
         {
             _mediator = mediator;
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCategoryCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(result);
         }
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

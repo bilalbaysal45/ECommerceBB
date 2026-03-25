@@ -50,6 +50,23 @@ app.MapControllers();
 //.WithName("GetWeatherForecast")
 //.WithOpenApi();
 
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var roles = new[] { "Admin", "User" };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+            var e = await userManager.FindByEmailAsync("bilalbaysal@outlook.com");
+            await userManager.AddToRoleAsync(e,"Admin");
+        }
+    }
+}
+
 app.Run();
 
 //record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
