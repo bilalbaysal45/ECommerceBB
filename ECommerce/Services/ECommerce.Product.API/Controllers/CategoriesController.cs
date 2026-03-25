@@ -27,7 +27,7 @@ namespace ECommerce.Product.API.Controllers
             return Ok(result);
         }
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
             var query = new GetCategoriesQuery();
