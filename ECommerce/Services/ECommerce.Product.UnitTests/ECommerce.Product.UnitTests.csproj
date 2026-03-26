@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="FluentAssertions" Version="8.9.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.14" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
@@ -24,7 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ECommerce.Order.API\ECommerce.Order.API.csproj" />
     <ProjectReference Include="..\ECommerce.Product.API\ECommerce.Product.API.csproj" />
+    <ProjectReference Include="..\ECommerce.Stock.API\ECommerce.Stock.API.csproj" />
   </ItemGroup>
 
 </Project>
