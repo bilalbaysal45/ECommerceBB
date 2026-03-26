@@ -1,3 +1,4 @@
+using ECommerce.Order.API.Core.Application.Consumers;
 using ECommerce.Order.API.Infrastructure.Persistence;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -16,12 +17,23 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Progr
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<StockNotEnoughEventConsumer>();
+    x.AddConsumer<StockReservedEventConsumer>();
     // MassTransit'in RabbitMQ kullanacaðýný belirtiyoruz
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", "/", h => {
             h.Username("Maeglin"); // RabbitMQ panelindeki ad
             h.Password("Sjmnwt480");         // RabbitMQ panelindeki þifre
+        });
+        // Endpoint yapýlandýrmasý
+        cfg.ReceiveEndpoint("stock-not-enough-queue", e =>
+        {
+            e.ConfigureConsumer<StockNotEnoughEventConsumer>(context);
+        });
+        cfg.ReceiveEndpoint("stock-reserved-queue", e =>
+        {
+            e.ConfigureConsumer<StockReservedEventConsumer>(context);
         });
     });
 });

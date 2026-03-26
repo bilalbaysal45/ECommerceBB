@@ -1,4 +1,6 @@
-﻿namespace ECommerce.Order.API.Core.Domain.Entities
+﻿using ECommerce.Order.API.Core.Domain.Enums;
+
+namespace ECommerce.Order.API.Core.Domain.Entities
 {
     public class Order
     {
@@ -7,5 +9,6 @@
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         public decimal TotalPrice { get; set; }
         public List<OrderItem> OrderItems { get; set; }
+        public OrderStatus Status { get; set; }
     }
 }

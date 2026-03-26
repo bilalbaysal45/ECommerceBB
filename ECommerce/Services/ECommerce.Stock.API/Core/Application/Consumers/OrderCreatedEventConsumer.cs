@@ -16,25 +16,45 @@ namespace ECommerce.Stock.API.Core.Application.Consumers
         public async Task Consume(ConsumeContext<OrderCreatedEvent> context)
         {
             var message = context.Message;
-            // Burada stok düşürme mantığını yazacağız
-            Console.WriteLine($"Sipariş alındı! ID: {message.OrderId}, Ürün Sayısı: {message.Items.Count}");
 
-            foreach (var item in message.Items)
+            // 1. Tüm ilgili stok kayıtlarını çek
+            var productIds = message.Items.Select(x => x.ProductId).ToList();
+            var stocks = await _context.Stocks
+                .Where(s => productIds.Contains(s.ProductId))
+                .ToListAsync();
+            // 2. Kontrol et
+            bool isStockAvailable = message.Items.All(item =>
             {
-                // Veritabanında ilgili ürünü bul
-                var stock = await _context.Stocks
-                    .FirstOrDefaultAsync(x => x.ProductId == item.ProductId);
+                var stock = stocks.FirstOrDefault(s => s.ProductId == item.ProductId);
+                return stock != null && stock.StockCount >= item.Quantity;
+            });
 
-                if (stock != null)
+            if (isStockAvailable)
+            {
+                // 3. Stokları düşür (Elimizdeki 'stocks' listesi üzerinden)
+                foreach (var item in message.Items)
                 {
-                    // Stok miktarını düşür
+                    var stock = stocks.First(s => s.ProductId == item.ProductId);
                     stock.StockCount -= item.Quantity;
-                    Console.WriteLine($"Ürün ID: {item.ProductId} için stok güncellendi. Yeni Stok: {stock.StockCount}");
                 }
+                // Değişiklikleri kaydet
+                await _context.SaveChangesAsync();
+                Console.WriteLine($"Stok güncellendi. Sipariş ID: {message.OrderId}");
+                await context.Publish(new StockReservedEvent
+                {
+                    OrderId = message.OrderId
+                });
             }
-
-            // Değişiklikleri kaydet
-            await _context.SaveChangesAsync();
+            else
+            {
+                // 4. Stok Yetersizse Yayınla
+                await context.Publish(new StockNotEnoughEvent
+                {
+                    OrderId = message.OrderId,
+                    Message = "Stok yetersizliği nedeniyle sipariş reddedildi."
+                });
+                Console.WriteLine($"Stok yetersiz! Sipariş ID: {message.OrderId}");
+            }
         }
     }
 }
