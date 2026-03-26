@@ -5,21 +5,21 @@ VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{30D0D6BD-9013-42BA-8942-352B9630B27B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{72847A29-48FB-4F39-8260-9B1DD4A8DAE6}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ECommerce.EventBus", "ECommerce.EventBus", "{F427233E-1A43-4DAC-9363-0F5414D8DD87}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Product.API", "Services\ECommerce.Product.API\ECommerce.Product.API.csproj", "{2EE061D0-71C7-4BA3-8A08-0F8E7DD35A14}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Order.API", "Services\ECommerce.Order.API\ECommerce.Order.API.csproj", "{18EF275F-E48F-4730-81F6-C953A377E592}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Stock.API", "Services\ECommerce.Stock.API\ECommerce.Stock.API.csproj", "{D6D21448-6B84-4583-8173-95878B4F5589}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Product.UnitTests", "Services\ECommerce.Product.UnitTests\ECommerce.Product.UnitTests.csproj", "{C7D80D7D-7A0A-47AB-8FBD-66B8BF4AFE86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Product.UnitTests", "Services\ECommerce.Product.UnitTests\ECommerce.Product.UnitTests.csproj", "{C7D80D7D-7A0A-47AB-8FBD-66B8BF4AFE86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Identity.API", "Services\ECommerce.Identity.API\ECommerce.Identity.API.csproj", "{565A8069-9119-4DD4-955C-5C35E7143015}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Identity.API", "Services\ECommerce.Identity.API\ECommerce.Identity.API.csproj", "{565A8069-9119-4DD4-955C-5C35E7143015}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Gateway.API", "Services\ECommerce.Gateway.API\ECommerce.Gateway.API.csproj", "{47CAD8F8-0625-4B21-B14A-B51522D8C0B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECommerce.Gateway.API", "Services\ECommerce.Gateway.API\ECommerce.Gateway.API.csproj", "{47CAD8F8-0625-4B21-B14A-B51522D8C0B8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{7C14F483-FAC0-41D5-A4C5-B0A69D8E726F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Shared", "BuildingBlocks\ECommerce.Shared\ECommerce.Shared.csproj", "{BA538709-1948-47CF-875C-FF555991197F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,18 +51,22 @@ Global
 		{47CAD8F8-0625-4B21-B14A-B51522D8C0B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47CAD8F8-0625-4B21-B14A-B51522D8C0B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47CAD8F8-0625-4B21-B14A-B51522D8C0B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA538709-1948-47CF-875C-FF555991197F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA538709-1948-47CF-875C-FF555991197F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA538709-1948-47CF-875C-FF555991197F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA538709-1948-47CF-875C-FF555991197F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F427233E-1A43-4DAC-9363-0F5414D8DD87} = {72847A29-48FB-4F39-8260-9B1DD4A8DAE6}
 		{2EE061D0-71C7-4BA3-8A08-0F8E7DD35A14} = {30D0D6BD-9013-42BA-8942-352B9630B27B}
 		{18EF275F-E48F-4730-81F6-C953A377E592} = {30D0D6BD-9013-42BA-8942-352B9630B27B}
 		{D6D21448-6B84-4583-8173-95878B4F5589} = {30D0D6BD-9013-42BA-8942-352B9630B27B}
 		{C7D80D7D-7A0A-47AB-8FBD-66B8BF4AFE86} = {30D0D6BD-9013-42BA-8942-352B9630B27B}
 		{565A8069-9119-4DD4-955C-5C35E7143015} = {30D0D6BD-9013-42BA-8942-352B9630B27B}
 		{47CAD8F8-0625-4B21-B14A-B51522D8C0B8} = {30D0D6BD-9013-42BA-8942-352B9630B27B}
+		{BA538709-1948-47CF-875C-FF555991197F} = {7C14F483-FAC0-41D5-A4C5-B0A69D8E726F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78EBC549-570C-4929-A396-1FD440D8CFE5}

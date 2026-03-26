@@ -19,6 +19,19 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
+          "Port": 7193 
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/order-service/{everything}",
+      "UpstreamHttpMethods": [ "Get", "Post", "Put", "Delete" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
           "Port": 7202
         }
       ],
