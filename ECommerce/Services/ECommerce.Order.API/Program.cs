@@ -30,6 +30,16 @@ builder.Services.AddValidatorsFromAssembly(typeof(CreateOrderCommandValidator).A
 
 builder.Services.AddMassTransit(x =>
 {
+    // 1. Outbox Yapýlandýrmasý
+    x.AddEntityFrameworkOutbox<OrderDbContext>(o =>
+    {
+        // Mesajlarý veritabanýndan okuyup RabbitMQ'ya gönderen sorgu tipini seçiyoruz
+        o.UseSqlServer();
+        // Outbox'ý bir arka plan servisi gibi çalýþtýrýr
+        o.UseBusOutbox();
+    });
+
+
     x.AddConsumer<StockNotEnoughEventConsumer>();
     x.AddConsumer<StockReservedEventConsumer>();
     // MassTransit'in RabbitMQ kullanacaðýný belirtiyoruz

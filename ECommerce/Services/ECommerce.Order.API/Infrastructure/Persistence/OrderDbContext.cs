@@ -1,4 +1,5 @@
 ﻿using ECommerce.Order.API.Core.Domain.Entities;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using DomainOrder = ECommerce.Order.API.Core.Domain.Entities.Order;
 
@@ -30,6 +31,9 @@ namespace ECommerce.Order.API.Infrastructure.Persistence
             });
 
             base.OnModelCreating(modelBuilder);
+
+            // MassTransit Outbox tablolarını (InboxState, OutboxState, OutboxMessage) ekler
+            modelBuilder.AddTransactionalOutboxEntities();
         }
     }
 }

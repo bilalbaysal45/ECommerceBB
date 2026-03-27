@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="9.1.0-develop.98" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="9.1.0-develop.94" />
     <PackageReference Include="MediatR" Version="14.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.25" />

@@ -28,33 +28,16 @@ namespace ECommerce.Order.API.Core.Application.Orders.Commands.CreateOrder
                 UnitPrice = x.Price
             }).ToList();
 
-            // Siparişi yeni constructor ile yaratıyoruz
-            // Id, CreatedDate, Status ve TotalPrice hesaplamasını artık Order sınıfı kendi içinde yapacak!
             var order = new DomainOrder(request.UserId, items);
-
-            //var order = new DomainOrder
-            //{
-            //    Id = Guid.NewGuid(),
-            //    UserId = request.UserId,
-            //    OrderDate = DateTime.UtcNow,
-            //    TotalPrice = request.Items.Sum(x => x.Price * x.Quantity),
-            //    OrderItems = request.Items.Select(x => new OrderItem
-            //    {
-            //        Id = Guid.NewGuid(),
-            //        ProductId = x.ProductId,
-            //        Quantity = x.Quantity,
-            //        UnitPrice = x.Price
-            //    }).ToList()
-            //};
 
             // 2. Veritabanına Kaydet
             _context.Orders.Add(order);
-            var result = await _context.SaveChangesAsync(cancellationToken);
 
-            if (result > 0)
-            {
-                // 3. RABBITMQ: Sipariş oluştu mesajını fırlat!
-                await _publishEndpoint.Publish(new OrderCreatedEvent
+
+            // 3. MESAJI BURADA (DB'YE YAZMADAN HEMEN ÖNCE) PUBLISH ET
+            // Outbox devrede olduğu için bu mesaj RabbitMQ'ya gitmeyecek, 
+            // Context içindeki 'OutboxMessages' tablosuna yazılmak üzere sıraya alınacak.
+            await _publishEndpoint.Publish(new OrderCreatedEvent
                 {
                     OrderId = order.Id,
                     UserId = order.UserId,
@@ -64,11 +47,9 @@ namespace ECommerce.Order.API.Core.Application.Orders.Commands.CreateOrder
                         Quantity = x.Quantity
                     }).ToList()
                 }, cancellationToken);
+            var result = await _context.SaveChangesAsync(cancellationToken);
 
-                return true;
-            }
-
-            return false;
+            return result > 0;
         }
     }
 }
