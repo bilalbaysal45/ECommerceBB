@@ -21,7 +21,7 @@ namespace ECommerce.Product.UnitTests.Application.Stocks
 
             using var context = new StockDbContext(options);
 
-            // Test için başlangıç verisi ekleyelim (ProductId: 1, Stok: 100)
+            // Test için başlangıç verisi ekleyelim ( Stok: 100)
             var testStock = new ECommerce.Stock.API.Core.Domain.Entities.Stock
             {
                 Id = Guid.NewGuid(),
@@ -34,7 +34,7 @@ namespace ECommerce.Product.UnitTests.Application.Stocks
             // Consumer'ı gerçek context ile oluşturuyoruz
             var consumer = new OrderCreatedEventConsumer(context);
 
-            // MassTransit'in ConsumeContext'ini Mock'lamamız gerekiyor çünkü bu mesajı taşıyan "zarf"
+            // MassTransit'in ConsumeContext'ini Mock'lamamız gerekiyor
             var consumeContextMock = new Mock<ConsumeContext<OrderCreatedEvent>>();
             consumeContextMock.Setup(x => x.Message).Returns(new OrderCreatedEvent
             {
@@ -50,7 +50,6 @@ namespace ECommerce.Product.UnitTests.Application.Stocks
 
             // 3. Assert: Sonucu doğrula
             var updatedStock = await context.Stocks.FirstOrDefaultAsync(x => x.ProductId == testStock.ProductId);
-
             updatedStock.Should().NotBeNull();
             updatedStock!.StockCount.Should().Be(80); // 100 - 20 = 80 olmalı
         }
