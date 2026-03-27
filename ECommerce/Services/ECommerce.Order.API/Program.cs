@@ -1,6 +1,10 @@
 using ECommerce.Order.API.Core.Application.Consumers;
+using ECommerce.Order.API.Core.Application.Orders.Validators;
+using ECommerce.Order.API.Core.Application.Pipelines;
 using ECommerce.Order.API.Infrastructure.Persistence;
+using FluentValidation;
 using MassTransit;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +17,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // MediatR Kaydý
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    // Pipeline Behavior kaydý
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+});
+
+// FluentValidator
+builder.Services.AddValidatorsFromAssembly(typeof(CreateOrderCommandValidator).Assembly);
 
 builder.Services.AddMassTransit(x =>
 {
