@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using DomainStock = ECommerce.Stock.API.Core.Domain.Entities.Stock;
 
 namespace ECommerce.Stock.API.Infrastructure.Persistence
@@ -20,6 +21,8 @@ namespace ECommerce.Stock.API.Infrastructure.Persistence
             });
 
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.AddTransactionalOutboxEntities();
         }
     }
 }

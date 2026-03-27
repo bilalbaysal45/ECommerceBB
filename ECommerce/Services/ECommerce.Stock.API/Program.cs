@@ -20,6 +20,12 @@ builder.Services.AddMassTransit(x =>
     // Consumer'ý tanýtýyoruz
     x.AddConsumer<OrderCreatedEventConsumer>();
 
+    x.AddEntityFrameworkOutbox<StockDbContext>(o =>
+    {
+        o.UseSqlServer();
+        o.UseBusOutbox(); // Gönderimler için Outbox
+    });
+
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", "/", h => {
@@ -30,6 +36,9 @@ builder.Services.AddMassTransit(x =>
         // Kuyruðu oluþtur ve Consumer ile baðla (Binding)
         cfg.ReceiveEndpoint("stock-order-created-queue", e =>
         {
+            // StockDbContext üzerinden Inbox kontrolü yapýlýr
+            e.UseEntityFrameworkOutbox<StockDbContext>(context);
+
             e.ConfigureConsumer<OrderCreatedEventConsumer>(context);
         });
     });
