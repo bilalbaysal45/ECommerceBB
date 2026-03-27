@@ -1,6 +1,7 @@
 using ECommerce.Order.API.Core.Application.Consumers;
 using ECommerce.Order.API.Core.Application.Orders.Validators;
 using ECommerce.Order.API.Core.Application.Pipelines;
+using ECommerce.Order.API.Infrastructure.Middlewares;
 using ECommerce.Order.API.Infrastructure.Persistence;
 using FluentValidation;
 using MassTransit;
@@ -55,6 +56,9 @@ builder.Services.AddDbContext<OrderDbContext>(options =>
 
 
 var app = builder.Build();
+
+// Hatalarý en dýþta yakalamasý için en üste ekliyoruz
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
