@@ -11,9 +11,9 @@ Idempotent Consumer (Inbox Pattern): Prevents duplicate message processing, pres
 MediatR Pipeline Behavior: Automatically validates all Command and Query requests before they reach their handlers.
 Global Exception Handling: Captures all errors through a centralized middleware and returns them in a standardized JSON format.
                           🛠️ Technologies Used
-                    Category	               Technologies
-                    Framework	               .NET 8.0
-                    Communication	           MassTransit, RabbitMQ
-                    Validation	             FluentValidation
-                    Testing	                 xUnit, Moq, FluentAssertions
-                    Patterns	               MediatR, CQRS, Outbox/Inbox, Rich Domain Model
+                    Category:	               Technologies
+                    Framework:	               .NET 8.0,
+                    Communication:	           MassTransit, RabbitMQ,
+                    Validation:	             FluentValidation,
+                    Testing:	                 xUnit, Moq, FluentAssertions,
+                    Patterns:	               MediatR, CQRS, Outbox/Inbox, Rich Domain Model
