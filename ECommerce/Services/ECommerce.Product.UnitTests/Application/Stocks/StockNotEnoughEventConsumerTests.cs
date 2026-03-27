@@ -10,44 +10,45 @@ using FluentAssertions;
 
 namespace ECommerce.Product.UnitTests.Application.Stocks
 {
-    public class StockReservedEventConsumerTests
+    public class StockNotEnoughEventConsumerTests
     {
         [Fact]
-        public async Task Consume_ValidEvent_ShouldUpdateOrderStatusToCompleted()
+        public async Task Consume_StockNotEnoughEvent_ShouldUpdateOrderStatusToFail()
         {
             // 1. Arrange: InMemory Database Kurulumu
             var options = new DbContextOptionsBuilder<OrderDbContext>()
-                .UseInMemoryDatabase(databaseName: "OrderTestDb_" + Guid.NewGuid().ToString())
+                .UseInMemoryDatabase(databaseName: "OrderTestDb_Fail_" + Guid.NewGuid().ToString())
                 .Options;
 
             using var context = new OrderDbContext(options);
 
-            // Test için başlangıçta 'Suspend' durumunda bir sipariş ekleyelim
             var items = new List<OrderItem>
             {
-                new OrderItem { ProductId = Guid.NewGuid(), Quantity = 1, UnitPrice = 100 }
+                new OrderItem { ProductId = Guid.NewGuid(), Quantity = 5, UnitPrice = 50 }
             };
-            var testOrder = new ECommerce.Order.API.Core.Domain.Entities.Order("user-123", items);
+
+            var testOrder = new ECommerce.Order.API.Core.Domain.Entities.Order("user-456", items);
 
             context.Orders.Add(testOrder);
             await context.SaveChangesAsync();
 
-            // Consumer ve Mock Context hazırlığı
-            var consumer = new StockReservedEventConsumer(context);
-            var consumeContextMock = new Mock<ConsumeContext<StockReservedEvent>>();
-            consumeContextMock.Setup(x => x.Message).Returns(new StockReservedEvent
+            var consumer = new StockNotEnoughEventConsumer(context);
+            var consumeContextMock = new Mock<ConsumeContext<StockNotEnoughEvent>>();
+
+            consumeContextMock.Setup(x => x.Message).Returns(new StockNotEnoughEvent
             {
-                OrderId = testOrder.Id
+                OrderId = testOrder.Id,
+                Message = "Yetersiz stok nedeniyle iptal."
             });
 
-            // 2. Act: Mesajı tüket
+            // 2. Act: Mesajı tüket (Consume)
             await consumer.Consume(consumeContextMock.Object);
 
             // 3. Assert: Sonucu doğrula
             var updatedOrder = await context.Orders.FirstOrDefaultAsync(x => x.Id == testOrder.Id);
 
             updatedOrder.Should().NotBeNull();
-            updatedOrder!.Status.Should().Be(OrderStatus.Completed); // Durum Completed olmalı!
+            updatedOrder!.Status.Should().Be(OrderStatus.Fail);
         }
     }
 }

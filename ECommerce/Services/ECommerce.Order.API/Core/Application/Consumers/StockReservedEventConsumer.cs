@@ -21,7 +21,8 @@ namespace ECommerce.Order.API.Core.Application.Consumers
 
         if (order != null)
         {
-            order.Status = OrderStatus.Completed; // Başarı!
+            //order.Status = OrderStatus.Completed;
+            order.Complete(); // order.Status = OrderStatus.Completed yerine
             await _context.SaveChangesAsync();
             Console.WriteLine($"Sipariş başarıyla tamamlandı: {order.Id}");
         }

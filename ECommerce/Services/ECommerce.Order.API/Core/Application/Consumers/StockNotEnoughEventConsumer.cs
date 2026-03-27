@@ -23,7 +23,8 @@ namespace ECommerce.Order.API.Core.Application.Consumers
             if (order != null)
             {
                 // 2. Sipariş durumunu 'Fail' (Hata/Reddedildi) olarak güncelle
-                order.Status = OrderStatus.Fail;
+                //order.Status = OrderStatus.Fail;
+                order.Reject(); //order.Status = OrderStatus.Fail yerine
 
                 await _context.SaveChangesAsync();
 

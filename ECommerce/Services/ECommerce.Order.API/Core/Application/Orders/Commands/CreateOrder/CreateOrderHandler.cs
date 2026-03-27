@@ -20,20 +20,32 @@ namespace ECommerce.Order.API.Core.Application.Orders.Commands.CreateOrder
         }
         public async Task<bool> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            var order = new DomainOrder
+            // 1. Önce OrderItem listeni hazırlıyoruz
+            var items = request.Items.Select(x => new OrderItem
             {
-                Id = Guid.NewGuid(),
-                UserId = request.UserId,
-                OrderDate = DateTime.UtcNow,
-                TotalPrice = request.Items.Sum(x => x.Price * x.Quantity),
-                OrderItems = request.Items.Select(x => new OrderItem
-                {
-                    Id = Guid.NewGuid(),
-                    ProductId = x.ProductId,
-                    Quantity = x.Quantity,
-                    UnitPrice = x.Price
-                }).ToList()
-            };
+                ProductId = x.ProductId,
+                Quantity = x.Quantity,
+                UnitPrice = x.Price
+            }).ToList();
+
+            // Siparişi yeni constructor ile yaratıyoruz
+            // Id, CreatedDate, Status ve TotalPrice hesaplamasını artık Order sınıfı kendi içinde yapacak!
+            var order = new DomainOrder(request.UserId, items);
+
+            //var order = new DomainOrder
+            //{
+            //    Id = Guid.NewGuid(),
+            //    UserId = request.UserId,
+            //    OrderDate = DateTime.UtcNow,
+            //    TotalPrice = request.Items.Sum(x => x.Price * x.Quantity),
+            //    OrderItems = request.Items.Select(x => new OrderItem
+            //    {
+            //        Id = Guid.NewGuid(),
+            //        ProductId = x.ProductId,
+            //        Quantity = x.Quantity,
+            //        UnitPrice = x.Price
+            //    }).ToList()
+            //};
 
             // 2. Veritabanına Kaydet
             _context.Orders.Add(order);
