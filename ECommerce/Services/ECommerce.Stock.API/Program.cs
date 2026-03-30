@@ -17,10 +17,10 @@ builder.Services.AddDbContext<StockDbContext>(options =>
 
 builder.Services.AddMassTransit(x =>
 {
-    // Yeni Consumer
+    //// Yeni Consumer
     x.AddConsumer<ProductCreatedEventConsumer>();
 
-    x.AddConsumer<OrderCreatedEventConsumer>();
+    x.AddConsumer<ReserveStockCommandConsumer>();
 
     x.AddEntityFrameworkOutbox<StockDbContext>(o =>
     {
@@ -43,13 +43,8 @@ builder.Services.AddMassTransit(x =>
 
             e.ConfigureConsumer<ProductCreatedEventConsumer>(context);
         });
-        // OrderCreatedEvent için endpoint
-        cfg.ReceiveEndpoint("stock-order-created-queue", e =>
-        {
-            // StockDbContext üzerinden Inbox kontrolü yapýlýr
-            e.UseEntityFrameworkOutbox<StockDbContext>(context);
-
-            e.ConfigureConsumer<OrderCreatedEventConsumer>(context);
+        cfg.ReceiveEndpoint("stock-reserve-queue", e => {
+            e.ConfigureConsumer<ReserveStockCommandConsumer>(context);
         });
     });
 });

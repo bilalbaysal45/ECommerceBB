@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Shared", "BuildingBlocks\ECommerce.Shared\ECommerce.Shared.csproj", "{BA538709-1948-47CF-875C-FF555991197F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Saga.StateMachine", "Services\ECommerce.Saga.StateMachine\ECommerce.Saga.StateMachine.csproj", "{ECA4611B-58BA-4F21-8F10-EAFE5DD6235A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{BA538709-1948-47CF-875C-FF555991197F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA538709-1948-47CF-875C-FF555991197F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA538709-1948-47CF-875C-FF555991197F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECA4611B-58BA-4F21-8F10-EAFE5DD6235A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECA4611B-58BA-4F21-8F10-EAFE5DD6235A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECA4611B-58BA-4F21-8F10-EAFE5DD6235A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECA4611B-58BA-4F21-8F10-EAFE5DD6235A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{565A8069-9119-4DD4-955C-5C35E7143015} = {30D0D6BD-9013-42BA-8942-352B9630B27B}
 		{47CAD8F8-0625-4B21-B14A-B51522D8C0B8} = {30D0D6BD-9013-42BA-8942-352B9630B27B}
 		{BA538709-1948-47CF-875C-FF555991197F} = {7C14F483-FAC0-41D5-A4C5-B0A69D8E726F}
+		{ECA4611B-58BA-4F21-8F10-EAFE5DD6235A} = {30D0D6BD-9013-42BA-8942-352B9630B27B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78EBC549-570C-4929-A396-1FD440D8CFE5}

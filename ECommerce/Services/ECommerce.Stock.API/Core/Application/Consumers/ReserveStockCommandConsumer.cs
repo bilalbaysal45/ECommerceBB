@@ -5,25 +5,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Stock.API.Core.Application.Consumers
 {
-    public class OrderCreatedEventConsumer : IConsumer<OrderCreatedEvent>
+    public class ReserveStockCommandConsumer : IConsumer<ReserveStockCommand>
     {
         private readonly StockDbContext _context;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-        public OrderCreatedEventConsumer(StockDbContext context)
+        public ReserveStockCommandConsumer(StockDbContext context, IPublishEndpoint publishEndpoint)
         {
             _context = context;
+            _publishEndpoint = publishEndpoint;
         }
-        public async Task Consume(ConsumeContext<OrderCreatedEvent> context)
+
+        public async Task Consume(ConsumeContext<ReserveStockCommand> context)
         {
             var message = context.Message;
+            Console.WriteLine($"Saga'dan stok rezervasyon komutu alındı. Sipariş ID: {message.OrderId}");
 
-            // 1. Tüm ilgili stok kayıtlarını çek
-            var productIds = message.Items.Select(x => x.ProductId).ToList();
+            var productIds = message.OrderItems.Select(x => x.ProductId).ToList();
+
+            // 2. Stok kayıtlarını getir
             var stocks = await _context.Stocks
                 .Where(s => productIds.Contains(s.ProductId))
                 .ToListAsync();
-            // 2. Kontrol et
-            bool isStockAvailable = message.Items.All(item =>
+
+            // 3. Stok yeterlilik kontrolü
+            bool isStockAvailable = message.OrderItems.All(item =>
             {
                 var stock = stocks.FirstOrDefault(s => s.ProductId == item.ProductId);
                 return stock != null && stock.StockCount >= item.Quantity;
@@ -31,15 +37,18 @@ namespace ECommerce.Stock.API.Core.Application.Consumers
 
             if (isStockAvailable)
             {
-                // 3. Stokları düşür (Elimizdeki 'stocks' listesi üzerinden)
-                foreach (var item in message.Items)
+                // 4. Stokları düşür
+                foreach (var item in message.OrderItems)
                 {
                     var stock = stocks.First(s => s.ProductId == item.ProductId);
                     stock.StockCount -= item.Quantity;
                 }
-                // Değişiklikleri kaydet
+
                 await _context.SaveChangesAsync();
-                Console.WriteLine($"Stok güncellendi. Sipariş ID: {message.OrderId}");
+
+                Console.WriteLine($"Stok başarıyla rezerve edildi. Sipariş ID: {message.OrderId}");
+
+                // Saga'ya "İşlem Tamam" bilgisini gönder
                 await context.Publish(new StockReservedEvent
                 {
                     OrderId = message.OrderId
@@ -47,13 +56,14 @@ namespace ECommerce.Stock.API.Core.Application.Consumers
             }
             else
             {
-                // 4. Stok Yetersizse Yayınla
+                // 5. Stok yetersizse Saga'ya "Hata" bilgisini gönder
+                Console.WriteLine($"Stok yetersiz! Sipariş ID: {message.OrderId}");
+
                 await context.Publish(new StockNotEnoughEvent
                 {
                     OrderId = message.OrderId,
-                    Message = "Stok yetersizliği nedeniyle sipariş reddedildi."
+                    Message = "Stokta yeterli ürün bulunamadı."
                 });
-                Console.WriteLine($"Stok yetersiz! Sipariş ID: {message.OrderId}");
             }
         }
     }

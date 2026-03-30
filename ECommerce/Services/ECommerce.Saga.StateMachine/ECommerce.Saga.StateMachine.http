@@ -1,0 +1,6 @@
+@ECommerce.Saga.StateMachine_HostAddress = http://localhost:5123
+
+GET {{ECommerce.Saga.StateMachine_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
