@@ -17,7 +17,9 @@ builder.Services.AddDbContext<StockDbContext>(options =>
 
 builder.Services.AddMassTransit(x =>
 {
-    // Consumer'ý tanýtýyoruz
+    // Yeni Consumer
+    x.AddConsumer<ProductCreatedEventConsumer>();
+
     x.AddConsumer<OrderCreatedEventConsumer>();
 
     x.AddEntityFrameworkOutbox<StockDbContext>(o =>
@@ -29,11 +31,19 @@ builder.Services.AddMassTransit(x =>
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", "/", h => {
-            h.Username("Maeglin"); // RabbitMQ panelindeki ad
-            h.Password("Sjmnwt480");         // RabbitMQ panelindeki þifre
+            h.Username("Maeglin");
+            h.Password("Sjmnwt480");
         });
 
-        // Kuyruðu oluþtur ve Consumer ile baðla (Binding)
+        // ProductCreatedEvent için endpoint
+        cfg.ReceiveEndpoint("product-created-stock-queue", e =>
+        {
+            // InboxState kontrolü için StockDbContext
+            e.UseEntityFrameworkOutbox<StockDbContext>(context);
+
+            e.ConfigureConsumer<ProductCreatedEventConsumer>(context);
+        });
+        // OrderCreatedEvent için endpoint
         cfg.ReceiveEndpoint("stock-order-created-queue", e =>
         {
             // StockDbContext üzerinden Inbox kontrolü yapýlýr

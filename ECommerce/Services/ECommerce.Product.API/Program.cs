@@ -4,6 +4,7 @@ using ECommerce.Product.API.Infrastructure.Middlewares;
 using ECommerce.Product.API.Infrastructure.Persistence;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +15,27 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
+builder.Services.AddMassTransit(x =>
+{
+    // EF Core Outbox kurulumu
+    x.AddEntityFrameworkOutbox<ProductDbContext>(o =>
+    {
+        o.UseSqlServer();
+        o.UseBusOutbox(); // Mesajlarý arka planda otomatik gönderir
+    });
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", "/",h =>
+        {
+            h.Username("Maeglin");
+            h.Password("Sjmnwt480");
+        });
+        cfg.ConfigureEndpoints(context);
+    });
+});
+
 // MediatR'ý sisteme kaydediyoruz. 
 // 'typeof(Program).Assembly' ifadesi, uygulamadaki tüm Handler sýnýflarýný otomatik taramasýný saðlar.
 builder.Services.AddMediatR(cfg => {

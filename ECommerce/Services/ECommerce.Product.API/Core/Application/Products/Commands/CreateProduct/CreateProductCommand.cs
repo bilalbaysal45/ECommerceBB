@@ -6,7 +6,6 @@ namespace ECommerce.Product.API.Core.Application.Products.Commands.CreateProduct
         string Description,
         string Sku,
         decimal Price,
-        int StockCount,
         Guid CategoryId
     ) : IRequest<Guid>;
 }

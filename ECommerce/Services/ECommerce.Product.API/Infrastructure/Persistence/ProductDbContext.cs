@@ -1,4 +1,5 @@
 ﻿using ECommerce.Product.API.Core.Domain.Entities;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using DomainProduct = ECommerce.Product.API.Core.Domain.Entities.Product;
 
@@ -32,6 +33,8 @@ namespace ECommerce.Product.API.Infrastructure.Persistence
                 entity.Property(c => c.Name).IsRequired().HasMaxLength(100);
             });
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.AddTransactionalOutboxEntities();
         }
     }
 }

@@ -1,11 +1,20 @@
 ﻿using ECommerce.Product.API.Core.Application.Products.Commands.CreateProduct;
 using ECommerce.Product.API.Core.Domain.Entities;
 using ECommerce.Product.API.Infrastructure.Persistence;
+using MassTransit;
+using MassTransit.Testing;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using Xunit;
 
 public class CreateProductHandlerTests
 {
+    private readonly Mock<IPublishEndpoint> _publishEndpointMock;
+
+    public CreateProductHandlerTests()
+    {
+        _publishEndpointMock = new Mock<IPublishEndpoint>();
+    }
     [Fact]
     public async Task Handle_Should_Add_Product_When_Category_Exists()
     {
@@ -16,13 +25,16 @@ public class CreateProductHandlerTests
 
         using var context = new ProductDbContext(options);
 
+        var harness = new InMemoryTestHarness();
+        await harness.Start();
+
         // Önce bir kategori eklemeliyiz (çünkü Product kategoriye bağlı)
         var category = new Category { Id = Guid.NewGuid(), Name = "Elektronik", Description = "..." };
         context.Categories.Add(category);
         await context.SaveChangesAsync();
 
-        var handler = new CreateProductHandler(context);
-        var command = new CreateProductCommand("Laptop", "a", "LPT-001", 1500, 2, category.Id); // Az önce oluşturduğumuz ID
+        var handler = new CreateProductHandler(context, harness.Bus);
+        var command = new CreateProductCommand("Laptop", "a", "LPT-001", 1500, category.Id); // Az önce oluşturduğumuz ID
         
 
         // 2. Act

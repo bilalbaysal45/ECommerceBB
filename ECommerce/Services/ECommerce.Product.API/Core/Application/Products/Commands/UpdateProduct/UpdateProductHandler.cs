@@ -24,7 +24,6 @@ namespace ECommerce.Product.API.Core.Application.Products.Commands.UpdateProduct
             product.Description = request.Description;
             product.Sku = request.Sku;
             product.Price = request.Price;
-            product.StockCount = request.StockCount;
             product.UpdatedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync(cancellationToken);

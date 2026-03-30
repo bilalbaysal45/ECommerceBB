@@ -12,10 +12,6 @@
 
         public decimal Price { get; set; }
 
-        // İlk etapta stok miktarını burada tutuyoruz. 
-        // İleride Stock.API devreye girdiğinde bu veriyi oradan senkronize edeceğiz.
-        public int StockCount { get; set; }
-
         public bool IsActive { get; set; } = true;
 
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;

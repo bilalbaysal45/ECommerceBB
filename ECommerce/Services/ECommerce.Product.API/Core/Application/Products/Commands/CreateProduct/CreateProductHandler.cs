@@ -1,15 +1,17 @@
 ﻿using MediatR;
-using ECommerce.Product.API.Core.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using ECommerce.Product.API.Infrastructure.Persistence;
+using ECommerce.Shared.Events;
+using MassTransit;
 namespace ECommerce.Product.API.Core.Application.Products.Commands.CreateProduct
 {
     public class CreateProductHandler : IRequestHandler<CreateProductCommand, Guid>
     {
         private readonly ProductDbContext _context;
-        public CreateProductHandler(ProductDbContext context)
+        private readonly IPublishEndpoint _publishEndpoint;
+        public CreateProductHandler(ProductDbContext context, IPublishEndpoint publishEndpoint)
         {
             _context = context;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -23,12 +25,18 @@ namespace ECommerce.Product.API.Core.Application.Products.Commands.CreateProduct
                 Description = request.Description,
                 Sku = request.Sku,
                 Price = request.Price,
-                StockCount = request.StockCount,
                 IsActive = true,
                 CategoryId = request.CategoryId,
                 CreatedDate = DateTime.UtcNow
             };
 
+            // Stock.API'nin haberi olsun diye mesaj atıyoruz
+            await _publishEndpoint.Publish(new ProductCreatedEvent
+            {
+                ProductId = product.Id,
+                SKU = product.Sku,
+                ProductName = product.Name
+            }, cancellationToken);
 
             // Veritabanına ekleme operasyonu
             _context.Products.Add(product);
