@@ -1,8 +1,8 @@
 ﻿using MassTransit; // Kritik: SagaClassMap için
-using Microsoft.EntityFrameworkCore; // ModelBuilder için
-using ECommerce.Shared.Sagas;
+using Microsoft.EntityFrameworkCore;
 using MassTransit.EntityFrameworkCoreIntegration;
-using ECommerce.Saga.StateMachine.Core.Application.Sagas; // Extension metodlar için
+using ECommerce.Saga.StateMachine.Core.Application.Sagas;
+using ECommerce.Saga.StateMachine.Core.Domain.Entities;
 namespace ECommerce.Saga.StateMachine.Infrastructure.Persistence
 {
     public class SagaDbContext : DbContext
@@ -11,6 +11,15 @@ namespace ECommerce.Saga.StateMachine.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<OrderState>(entity =>
+            {
+                entity.HasKey(x => x.CorrelationId);
+
+                // Bire-Çok İlişki Tanımı
+                entity.HasMany(x => x.OrderItems)
+                      .WithOne()
+                      .HasForeignKey(x => x.OrderStateId);
+            });
             base.OnModelCreating(modelBuilder);
 
             // Extension metoduna güvenmek yerine doğrudan Map sınıfını kullanıyoruz

@@ -1,6 +1,6 @@
 using ECommerce.Saga.StateMachine.Core.Application.Sagas;
+using ECommerce.Saga.StateMachine.Core.Domain.Entities;
 using ECommerce.Saga.StateMachine.Infrastructure.Persistence;
-using ECommerce.Shared.Sagas;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +18,8 @@ builder.Services.AddMassTransit(x =>
         {
             r.ExistingDbContext<SagaDbContext>();
             r.UseSqlServer();
+            // Saga yüklendiðinde OrderItems tablosunu da beraberinde getir
+            r.CustomizeQuery(query => query.Include(s => s.OrderItems));
         });
 
     x.UsingRabbitMq((context, cfg) =>

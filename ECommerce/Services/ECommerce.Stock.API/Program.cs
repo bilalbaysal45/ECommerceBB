@@ -2,6 +2,7 @@ using ECommerce.Stock.API.Core.Application.Consumers;
 using ECommerce.Stock.API.Infrastructure.Persistence;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,12 +16,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<StockDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddMassTransit(x =>
 {
     //// Yeni Consumer
     x.AddConsumer<ProductCreatedEventConsumer>();
-
     x.AddConsumer<ReserveStockCommandConsumer>();
+    x.AddConsumer<CompensateStockCommandConsumer>();
 
     x.AddEntityFrameworkOutbox<StockDbContext>(o =>
     {
@@ -45,6 +47,10 @@ builder.Services.AddMassTransit(x =>
         });
         cfg.ReceiveEndpoint("stock-reserve-queue", e => {
             e.ConfigureConsumer<ReserveStockCommandConsumer>(context);
+        });
+        cfg.ReceiveEndpoint("stock-compensate-queue", e => 
+        {
+            e.ConfigureConsumer<CompensateStockCommandConsumer>(context);
         });
     });
 });

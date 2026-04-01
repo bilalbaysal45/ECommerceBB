@@ -1,4 +1,4 @@
-﻿using ECommerce.Shared.Sagas;
+﻿using ECommerce.Saga.StateMachine.Core.Domain.Entities;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 

@@ -23,12 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Core\Domain\Entities\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\ECommerce.Shared\ECommerce.Shared.csproj" />
     <ProjectReference Include="..\ECommerce.Payment.API\ECommerce.Payment.API.csproj" />
+    <ProjectReference Include="..\ECommerce.Stock.API\ECommerce.Stock.API.csproj" />
   </ItemGroup>
 
 </Project>

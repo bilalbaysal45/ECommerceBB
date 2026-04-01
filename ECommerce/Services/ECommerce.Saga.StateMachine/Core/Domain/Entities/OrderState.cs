@@ -1,14 +1,8 @@
 ﻿using MassTransit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ECommerce.Shared.Sagas
+namespace ECommerce.Saga.StateMachine.Core.Domain.Entities
 {
     public class OrderState : SagaStateMachineInstance, ISagaVersion
-
     {
         public Guid CorrelationId { get; set; }
         public string CurrentState { get; set; }
@@ -17,5 +11,6 @@ namespace ECommerce.Shared.Sagas
         public string UserId { get; set; }
         public decimal TotalPrice { get; set; }
         public int Version { get; set; }
+        public List<OrderStateItem> OrderItems { get; set; }
     }
 }

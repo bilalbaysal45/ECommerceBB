@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Saga.StateMachine.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(SagaDbContext))]
-    [Migration("20260330135911_InitialSagaTables")]
-    partial class InitialSagaTables
+    [Migration("20260401173342_InitialSagaTable")]
+    partial class InitialSagaTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,42 @@ namespace ECommerce.Saga.StateMachine.Infrastructure.Persistence.Migrations
                     b.HasKey("CorrelationId");
 
                     b.ToTable("OrderState");
+                });
+
+            modelBuilder.Entity("ECommerce.Shared.Sagas.OrderStateItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderStateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderStateId");
+
+                    b.ToTable("OrderStateItem");
+                });
+
+            modelBuilder.Entity("ECommerce.Shared.Sagas.OrderStateItem", b =>
+                {
+                    b.HasOne("ECommerce.Shared.Sagas.OrderState", null)
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ECommerce.Shared.Sagas.OrderState", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }

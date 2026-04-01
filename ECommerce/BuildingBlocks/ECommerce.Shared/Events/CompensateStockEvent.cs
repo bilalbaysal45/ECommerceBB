@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ECommerce.Shared.Events.Payments
+namespace ECommerce.Shared.Events
 {
-    public class PaymentFailedEvent
+    public class CompensateStockEvent
     {
         public Guid OrderId { get; set; }
-        public string Message { get; set; }
         public List<OrderItemMessage> OrderItems { get; set; }
     }
 }
