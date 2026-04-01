@@ -37,19 +37,31 @@ namespace ECommerce.Order.API.Core.Application.Orders.Commands.CreateOrder
             // 3. MESAJI BURADA (DB'YE YAZMADAN HEMEN ÖNCE) PUBLISH ET
             // Outbox devrede olduğu için bu mesaj RabbitMQ'ya gitmeyecek, 
             // Context içindeki 'OutboxMessages' tablosuna yazılmak üzere sıraya alınacak.
+            var totalPrice = GetTotalPrice(order.OrderItems);
             await _publishEndpoint.Publish(new OrderCreatedEvent
                 {
                     OrderId = order.Id,
                     UserId = order.UserId,
+                    TotalPrice = totalPrice,
                     Items = order.OrderItems.Select(x => new OrderItemMessage
                     {
                         ProductId = x.ProductId,
-                        Quantity = x.Quantity
+                        Quantity = x.Quantity,
+                        Price = x.UnitPrice
                     }).ToList()
                 }, cancellationToken);
             var result = await _context.SaveChangesAsync(cancellationToken);
 
             return result > 0;
+        }
+        private decimal GetTotalPrice(List<OrderItem> items)
+        {
+            decimal totalPrice = 0;
+            foreach (var item in items)
+            {
+                totalPrice += item.Quantity * item.UnitPrice;
+            }
+            return totalPrice;
         }
     }
 }

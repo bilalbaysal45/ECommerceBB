@@ -11,6 +11,7 @@ namespace ECommerce.Shared.Events
     {
         public Guid OrderId { get; set; }
         public string UserId { get; set; }
+        public decimal TotalPrice { get; set; }
         public List<OrderItemMessage> Items { get; set; }
     }
 }

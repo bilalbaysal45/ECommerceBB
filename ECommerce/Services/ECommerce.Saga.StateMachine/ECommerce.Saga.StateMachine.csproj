@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="9.1.0-develop.98" />
+    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="9.1.0-develop.99" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="9.1.0-develop.99" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\ECommerce.Shared\ECommerce.Shared.csproj" />
+    <ProjectReference Include="..\ECommerce.Payment.API\ECommerce.Payment.API.csproj" />
   </ItemGroup>
 
 </Project>

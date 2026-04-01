@@ -13,7 +13,7 @@ namespace ECommerce.Saga.StateMachine.Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            // ÇÖZÜM: Extension metoduna güvenmek yerine doğrudan Map sınıfını kullanıyoruz
+            // Extension metoduna güvenmek yerine doğrudan Map sınıfını kullanıyoruz
             var map = new OrderStateMap();
             map.Configure(modelBuilder);
         }
