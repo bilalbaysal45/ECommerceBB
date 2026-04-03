@@ -21,7 +21,12 @@ builder.Services.AddMassTransit(x =>
             // Saga yüklendiðinde OrderItems tablosunu da beraberinde getir
             r.CustomizeQuery(query => query.Include(s => s.OrderItems));
         });
-
+    x.AddEntityFrameworkOutbox<SagaDbContext>(o =>
+    {
+        // Mesajlarý veritabanýnda sakla
+        o.UseSqlServer();
+        o.UseBusOutbox();
+    });
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", "/", h =>

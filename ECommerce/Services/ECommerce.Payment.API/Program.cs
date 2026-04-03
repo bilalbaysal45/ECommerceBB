@@ -1,4 +1,5 @@
 using ECommerce.Payment.API.Core.Application.Consumers;
+using ECommerce.Payment.API.Infrastructure.Persistence;
 using MassTransit;
 using System.Reflection;
 
@@ -18,6 +19,12 @@ builder.Services.AddMassTransit(x =>
 {
     // Consumer'ý MassTransit'e tanýtýyoruz
     x.AddConsumer<ProcessPaymentCommandConsumer>();
+
+    x.AddEntityFrameworkOutbox<PaymentDbContext>(o =>
+    {
+        o.UseSqlServer();
+        o.UseBusOutbox();
+    });
 
     x.UsingRabbitMq((context, cfg) =>
     {

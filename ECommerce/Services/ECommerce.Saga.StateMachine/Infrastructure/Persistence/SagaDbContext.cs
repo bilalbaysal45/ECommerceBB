@@ -1,6 +1,5 @@
-﻿using MassTransit; // Kritik: SagaClassMap için
+﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using MassTransit.EntityFrameworkCoreIntegration;
 using ECommerce.Saga.StateMachine.Core.Application.Sagas;
 using ECommerce.Saga.StateMachine.Core.Domain.Entities;
 namespace ECommerce.Saga.StateMachine.Infrastructure.Persistence
@@ -11,6 +10,9 @@ namespace ECommerce.Saga.StateMachine.Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.AddInboxStateEntity();
+            modelBuilder.AddOutboxMessageEntity();
+            modelBuilder.AddOutboxStateEntity();
             modelBuilder.Entity<OrderState>(entity =>
             {
                 entity.HasKey(x => x.CorrelationId);
