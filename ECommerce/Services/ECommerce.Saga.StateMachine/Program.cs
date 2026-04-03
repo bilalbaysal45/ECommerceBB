@@ -36,6 +36,7 @@ builder.Services.AddMassTransit(x =>
         });
         cfg.ReceiveEndpoint("order-state-queue", e =>
         {
+            e.UseEntityFrameworkOutbox<SagaDbContext>(context);
             // Bu satýr Saga'yý ve onun dinlediði eventleri (StockReservedEvent vb.) bu kuyruða baðlar
             e.ConfigureSaga<OrderState>(context);
         });
