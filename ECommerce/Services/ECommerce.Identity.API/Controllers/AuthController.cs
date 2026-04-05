@@ -36,7 +36,8 @@ namespace ECommerce.Identity.API.Controllers
 
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
-
+            var registeredUser = await _userManager.FindByEmailAsync(registerDto.Email);
+            await _userManager.AddToRoleAsync(registeredUser , "User");
             return Ok(new AuthResponseDto { IsSuccess = true, Message = "Kullanıcı başarıyla oluşturuldu." });
         }
         [HttpPost("login")]

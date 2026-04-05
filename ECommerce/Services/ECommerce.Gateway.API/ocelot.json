@@ -19,12 +19,19 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7193 
+          "Port": 7193
         }
       ],
       "UpstreamPathTemplate": "/gateway/order-service/{everything}",
       "UpstreamHttpMethods": [ "Get", "Post", "Put", "Delete" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "GatewayKey",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "User"
+      }
     },
     {
       "DownstreamPathTemplate": "/api/{everything}",
@@ -40,7 +47,7 @@
       "DangerousAcceptAnyServerCertificateValidator": true
     },
     {
-      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamPathTemplate": "/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -50,10 +57,14 @@
       ],
       "UpstreamPathTemplate": "/gateway/payment-service/{everything}",
       "UpstreamHttpMethods": [ "Get", "Post" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "GatewayKey",
+        "AllowedScopes": []
+      }
     },
     {
-      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamPathTemplate": "/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -62,8 +73,15 @@
         }
       ],
       "UpstreamPathTemplate": "/gateway/stock-service/{everything}",
-      "UpstreamHttpMethods": [ "Get", "Post","Put" ],
-      "DangerousAcceptAnyServerCertificateValidator": true
+      "UpstreamHttpMethods": [ "Get", "Post", "Put" ],
+      "DangerousAcceptAnyServerCertificateValidator": true,
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "GatewayKey",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": "Admin"
+      }
     }
   ],
   "GlobalConfiguration": {
