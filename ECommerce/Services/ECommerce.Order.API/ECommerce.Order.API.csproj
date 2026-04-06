@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="MassTransit.EntityFrameworkCore" Version="9.1.0-develop.98" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="9.1.0-develop.94" />
@@ -22,10 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\ECommerce.Shared\ECommerce.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Core\Application\Orders\Queries\" />
   </ItemGroup>
 
 </Project>

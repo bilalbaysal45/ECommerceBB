@@ -1,4 +1,5 @@
 using ECommerce.Order.API.Core.Application.Consumers;
+using ECommerce.Order.API.Core.Application.Mapping;
 using ECommerce.Order.API.Core.Application.Orders.Validators;
 using ECommerce.Order.API.Core.Application.Pipelines;
 using ECommerce.Order.API.Infrastructure.Middlewares;
@@ -39,7 +40,6 @@ builder.Services.AddMassTransit(x =>
         o.UseBusOutbox();
     });
 
-
     x.AddConsumer<StockNotEnoughEventConsumer>();
     x.AddConsumer<StockReservedEventConsumer>();
     // MassTransit'in RabbitMQ kullanacaðýný belirtiyoruz
@@ -64,6 +64,7 @@ builder.Services.AddMassTransit(x =>
 builder.Services.AddDbContext<OrderDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
 var app = builder.Build();
 
