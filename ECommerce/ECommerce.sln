@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Saga.StateMachine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Payment.API", "Services\ECommerce.Payment.API\ECommerce.Payment.API.csproj", "{F23EF569-EA4B-425A-8B98-FB5E8CF82AF8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.RedisExtensions", "BuildingBlocks\ECommerce.RedisExtensions\ECommerce.RedisExtensions.csproj", "{AF4F6CC9-019F-41BF-A558-FA9DF78F028E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{F23EF569-EA4B-425A-8B98-FB5E8CF82AF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F23EF569-EA4B-425A-8B98-FB5E8CF82AF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F23EF569-EA4B-425A-8B98-FB5E8CF82AF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF4F6CC9-019F-41BF-A558-FA9DF78F028E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF4F6CC9-019F-41BF-A558-FA9DF78F028E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF4F6CC9-019F-41BF-A558-FA9DF78F028E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF4F6CC9-019F-41BF-A558-FA9DF78F028E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{BA538709-1948-47CF-875C-FF555991197F} = {7C14F483-FAC0-41D5-A4C5-B0A69D8E726F}
 		{ECA4611B-58BA-4F21-8F10-EAFE5DD6235A} = {30D0D6BD-9013-42BA-8942-352B9630B27B}
 		{F23EF569-EA4B-425A-8B98-FB5E8CF82AF8} = {30D0D6BD-9013-42BA-8942-352B9630B27B}
+		{AF4F6CC9-019F-41BF-A558-FA9DF78F028E} = {7C14F483-FAC0-41D5-A4C5-B0A69D8E726F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78EBC549-570C-4929-A396-1FD440D8CFE5}
