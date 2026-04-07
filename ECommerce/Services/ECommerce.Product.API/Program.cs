@@ -1,9 +1,8 @@
 using ECommerce.Product.API.Core.Application.Mapping;
 using ECommerce.Product.API.Core.Application.Pipelines;
-using ECommerce.Product.API.Infrastructure.Middlewares;
 using ECommerce.Product.API.Infrastructure.Persistence;
+using ECommerce.Shared.Middlewares;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -109,7 +108,7 @@ builder.Services.AddAuthentication(options =>
 var app = builder.Build();
 
 // Hatalarý en üstte yakalamasý için en baþa ekliyoruz
-app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

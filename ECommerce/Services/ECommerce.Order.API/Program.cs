@@ -2,8 +2,8 @@ using ECommerce.Order.API.Core.Application.Consumers;
 using ECommerce.Order.API.Core.Application.Mapping;
 using ECommerce.Order.API.Core.Application.Orders.Validators;
 using ECommerce.Order.API.Core.Application.Pipelines;
-using ECommerce.Order.API.Infrastructure.Middlewares;
 using ECommerce.Order.API.Infrastructure.Persistence;
+using ECommerce.Shared.Middlewares;
 using FluentValidation;
 using MassTransit;
 using MediatR;
@@ -69,7 +69,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 var app = builder.Build();
 
 // Hatalarý en dýþta yakalamasý için en üste ekliyoruz
-app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

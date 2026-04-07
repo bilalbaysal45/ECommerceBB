@@ -4,7 +4,6 @@ using ECommerce.Product.API.Core.Application.Products.Commands.UpdateProduct;
 using ECommerce.Product.API.Core.Application.Products.Queries.GetProductById;
 using ECommerce.Product.API.Core.Application.Products.Queries.GetProducts;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Product.API.Controllers
@@ -22,7 +21,7 @@ namespace ECommerce.Product.API.Controllers
         public async Task<IActionResult> Create([FromBody] CreateProductCommand command)
         {
             var result = await _mediator.Send(command);
-            return Ok(result); // Oluşturulan ürünün Id'sini döner
+            return Ok(result);
         }
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetProductsQuery query)
